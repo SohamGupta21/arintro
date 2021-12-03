@@ -15,10 +15,24 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Load the "Box" scene from the "Experience" Reality File
-        let boxAnchor = try! Experience.loadBox()
+        let anchor = AnchorEntity(plane: .horizontal, minimumBounds: [0.2, 0.7])
         
-        // Add the box anchor to the scene
-        arView.scene.anchors.append(boxAnchor)
+        arView.scene.addAnchor(anchor)
+        
+        let box = MeshResource.generateText("Soham Gupta",
+                                            extrusionDepth: 0.05,
+                                                      font: .systemFont(ofSize: 0.15),
+                                            containerFrame: CGRect.zero,
+                                                 alignment: .center,
+                                             lineBreakMode: .byCharWrapping)
+        
+        let metalMaterial = SimpleMaterial(color:.red, isMetallic: true)
+        
+        let model = ModelEntity(mesh:box, materials: [metalMaterial])
+        
+        model.generateCollisionShapes(recursive: true)
+        
+        model.position = [0, 0, 0]
+        anchor.addChild(model)
     }
 }
